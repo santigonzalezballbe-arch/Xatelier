@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XATELIER · Rostissería · Pedidos online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1a2738;
+  --blue-deep: #0f1825;
+  --blue-soft: #2a3a52;
+  --blue-tint: #e8edf3;
+  --orange: #e85d1f;
+  --orange-deep: #c44a14;
+  --orange-soft: #f5a373;
+  --orange-tint: #fdeee3;
+  --bg: #f3f3f5;
+  --bg-soft: #fafafb;
+  --paper: #ffffff;
+  --text: #1a2738;
+  --text-soft: #5a6478;
+  --text-faint: #9aa3b2;
+  --line: #e6e8ec;
+  --line-strong: #d4d7dd;
+  --success: #2e7d52;
+  --danger: #c0392b;
+  --shadow-sm: 0 1px 2px rgba(15,24,37,0.04), 0 1px 3px rgba(15,24,37,0.04);
+  --shadow-md: 0 2px 6px rgba(15,24,37,0.06), 0 8px 24px rgba(15,24,37,0.06);
+  --shadow-lg: 0 4px 12px rgba(15,24,37,0.08), 0 24px 60px rgba(15,24,37,0.14);
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+a { color: inherit; }
+
+/* ===== MASTHEAD ===== */
+.masthead {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.masthead::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--orange);
+}
+.masthead-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3rem;
+  align-items: end;
+}
+.brand-block { display: flex; flex-direction: column; gap: 0.65rem; }
+.brand-eyebrow {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.brand-name {
+  font: 300 5rem/0.9 'Cormorant Garamond', serif;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  margin-bottom: 0.15rem;
+}
+.brand-tagline {
+  font: 300 14px/1.5 'Inter', sans-serif;
+  color: var(--text-soft);
+  max-width: 44ch;
+}
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 1rem 2.5rem;
+}
+.meta-item dt {
+  font: 600 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 0.3rem;
+}
+.meta-item dd { font-size: 13px; color: var(--text); font-weight: 400; }
+.meta-item dd a { text-decoration: none; border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; transition: color 200ms, border-color 200ms; }
+.meta-item dd a:hover { color: var(--orange); border-color: var(--orange); }
+
+/* ===== LAYOUT ===== */
+.layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 2.5rem 5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+.menu-column { min-width: 0; }
+
+/* Category nav */
+.cat-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: none;
+}
+.cat-nav::-webkit-scrollbar { display: none; }
+.cat-pill {
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: all 200ms var(--ease);
+}
+.cat-pill:hover { border-color: var(--blue); color: var(--blue); }
+.cat-pill.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+/* Category */
+.category {
+  margin-bottom: 4rem;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 900ms var(--ease), transform 900ms var(--ease);
+}
+.category.is-in { opacity: 1; transform: none; }
+.category-head { margin-bottom: 1.75rem; max-width: 60ch; }
+.category-eyebrow {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.6rem;
+}
+.category-title {
+  font: 400 2.4rem/1 'Cormorant Garamond', serif;
+  color: var(--blue);
+  letter-spacing: 0.01em;
+  margin-bottom: 0.5rem;
+}
+.category-subtitle {
+  font: 300 14px/1.5 'Inter', sans-serif;
+  color: var(--text-soft);
+}
+.category-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--orange);
+  margin-top: 1rem;
+}
+
+/* Product grid */
+.product-grid {
+  display: grid;
+  /* Así las tarjetas no se estiran al infinito, se crean más columnas si hay espacio */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Product card */
+.product {
+  background: var(--paper);
+  border-radius: 4px;
+  padding: 1.5rem 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+  transition: box-shadow 300ms var(--ease), border-color 300ms var(--ease), transform 300ms var(--ease);
+  position: relative;
+}
+.product-photo {
+  width: calc(100% + 3rem);
+  margin: -1.5rem -1.5rem 0.15rem -1.5rem;
+  /* Usamos un ratio fijo para que siempre se vea bien proporcionada */
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px 4px 0 0;
+  display: block;
+  background: var(--line);
+}
+.product:hover { box-shadow: var(--shadow-md); border-color: var(--line-strong); }
+.product.is-out { opacity: 0.55; }
+.product.is-out .product-name { text-decoration: line-through; color: var(--text-faint); }
+.product.is-out .product-desc { color: var(--text-faint); }
+
+.product-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.product-name {
+  font: 500 1.3rem/1.2 'Cormorant Garamond', serif;
+  color: var(--blue);
+  flex: 1;
+  letter-spacing: 0.005em;
+}
+.product-price-block { text-align: right; flex-shrink: 0; }
+.product-price {
+  font: 600 1.05rem/1 'Inter', sans-serif;
+  color: var(--orange);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  display: inline-block;
+  transition: color 200ms var(--ease);
+}
+.product-price-unit { font-size: 0.7em; color: var(--text-soft); font-weight: 500; margin-left: 2px; }
+.product-price-out {
+  font: 700 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--danger);
+  padding: 0.4rem 0.55rem;
+  background: rgba(192, 57, 43, 0.08);
+  border-radius: 2px;
+}
+
+.product-desc {
+  font: 300 13px/1.55 'Inter', sans-serif;
+  color: var(--text-soft);
+}
+
+/* Options */
+.product-options { display: flex; flex-direction: column; gap: 0.85rem; }
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.option-label {
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.option-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.opt-btn {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 200ms var(--ease);
+  text-align: left;
+}
+.opt-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.opt-btn.active {
+  background: var(--orange-tint);
+  border-color: var(--orange);
+  color: var(--orange-deep);
+  font-weight: 600;
+}
+/* Flavor panel */
+.flavor-panel {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.9rem;
+}
+.flavor-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  font-size: 12px;
+}
+.flavor-head-label {
+  font: 600 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.flavor-counter {
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--text-soft);
+}
+.flavor-counter strong { color: var(--orange); font-weight: 700; font-size: 14px; }
+.flavor-counter.is-complete strong { color: var(--success); }
+.flavor-counter.is-over strong { color: var(--danger); }
+.flavor-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.flavor-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+.flavor-name {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 400;
+}
+.flavor-premium {
+  font-size: 10px;
+  color: var(--orange);
+  font-weight: 600;
+  margin-left: 0.4rem;
+}
+.flavor-controls { display: flex; align-items: center; gap: 0.5rem; }
+.flavor-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  color: var(--text-soft);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  line-height: 1;
+  transition: all 200ms var(--ease);
+}
+.flavor-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+.flavor-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.flavor-qty {
+  font: 600 13px/1 'Inter', sans-serif;
+  color: var(--blue);
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Product footer */
+.product-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 0.15rem;
+  min-height: 38px;
+}
+.product-locked-note {
+  font: 400 11px/1.3 'Inter', sans-serif;
+  color: var(--text-faint);
+  font-style: italic;
+  max-width: 18ch;
+}
+.product-add {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: white;
+  display: grid;
+  place-items: center;
+  transition: all 250ms var(--ease);
+  box-shadow: 0 2px 8px rgba(232, 93, 31, 0.3);
+  flex-shrink: 0;
+}
+.product-add:hover:not(:disabled) {
+  background: var(--orange-deep);
+  transform: scale(1.06);
+  box-shadow: 0 4px 14px rgba(232, 93, 31, 0.45);
+}
+.product-add:active:not(:disabled) { transform: scale(0.95); }
+.product-add:disabled { background: var(--line-strong); color: var(--text-faint); cursor: not-allowed; box-shadow: none; }
+.product-add.is-success { background: var(--success); box-shadow: 0 4px 14px rgba(46, 125, 82, 0.4); }
+.product-add svg { width: 16px; height: 16px; }
+
+/* ===== CART (siempre modal) ===== */
+.cart {
+  display: flex;
+  flex-direction: column;
+}
+.cart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.cart-head-title {
+  font: 500 1.15rem/1 'Cormorant Garamond', serif;
+  color: var(--blue);
+}
+.cart-head-count {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+.cart-head-count span { color: var(--orange); font-weight: 700; }
+.cart-body {
+  padding: 0.5rem 1.5rem;
+}
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  gap: 1rem;
+  color: var(--text-faint);
+}
+.cart-empty-icon { width: 40px; height: 40px; opacity: 0.5; }
+.cart-empty-icon svg { width: 100%; height: 100%; }
+.cart-empty-text {
+  font: 300 13px/1.6 'Inter', sans-serif;
+  color: var(--text-soft);
+}
+.cart-list {
+  display: flex;
+  flex-direction: column;
+}
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.75rem;
+  padding: 1rem 0.85rem;
+  margin-bottom: 0.6rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--orange);
+  border-radius: 4px;
+  transition: box-shadow 200ms var(--ease), border-color 200ms var(--ease);
+}
+.cart-item:hover { box-shadow: var(--shadow-sm); border-color: var(--line-strong); border-left-color: var(--orange-deep); }
+.cart-item:last-child { margin-bottom: 0; }
+.cart-item-name {
+  font: 600 1.1rem/1.25 'Cormorant Garamond', serif;
+  color: var(--blue);
+}
+.cart-item-price {
+  font: 700 15px/1.25 'Inter', sans-serif;
+  color: var(--orange-deep);
+  text-align: right;
+  white-space: nowrap;
+}
+.cart-item-detail {
+  grid-column: 1 / -1;
+  font: 300 12px/1.5 'Inter', sans-serif;
+  color: var(--text-soft);
+}
+.cart-item-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.55rem;
+}
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--paper);
+  border: 1.5px solid var(--orange-soft);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+.qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--orange-tint);
+  border: 1px solid var(--orange-soft);
+  color: var(--orange-deep);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  transition: all 200ms var(--ease);
+}
+.qty-btn:hover { background: var(--orange); border-color: var(--orange); color: white; transform: scale(1.08); }
+.qty-display {
+  font: 700 13px/1 'Inter', sans-serif;
+  color: var(--blue);
+  min-width: 16px;
+  text-align: center;
+}
+.remove-btn {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--danger);
+  background: rgba(192, 57, 43, 0.08);
+  padding: 0.4rem 0.65rem;
+  border-radius: 3px;
+  transition: all 200ms var(--ease);
+}
+.remove-btn:hover { background: var(--danger); color: white; }
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.15rem 1.5rem;
+  background: linear-gradient(135deg, var(--blue), var(--blue-soft));
+  color: white;
+}
+.cart-total-label {
+  font: 600 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 0.35rem;
+}
+.cart-total-delivery {
+  font: 400 11px/1.3 'Inter', sans-serif;
+  color: rgba(255,255,255,0.75);
+}
+.cart-total-amount {
+  font: 700 1.75rem/1 'Inter', sans-serif;
+  color: var(--orange-soft);
+  letter-spacing: -0.01em;
+}
+
+/* Form */
+.cart-form {
+  padding: 1.25rem 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.form-section-title {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 0.1rem;
+}
+.form-warnings { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-warning {
+  font: 700 13.5px/1.5 'Inter', sans-serif;
+  color: #ffffff;
+  background: var(--danger);
+  border: 1px solid #a5311f;
+  border-radius: 4px;
+  padding: 0.75rem 0.9rem 0.75rem 2.6rem;
+  box-shadow: 0 2px 8px rgba(192, 57, 43, 0.35);
+  position: relative;
+  animation: warningPulse 1.8s ease-in-out infinite;
+}
+.form-warning::before {
+  content: '⚠';
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  line-height: 1;
+}
+@keyframes warningPulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(192, 57, 43, 0.35); }
+  50% { box-shadow: 0 2px 16px rgba(192, 57, 43, 0.65); }
+}
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.form-label {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+.form-label .req, .req { color: var(--orange); }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 13.5px;
+  color: var(--text);
+  transition: border-color 200ms var(--ease), background 200ms var(--ease);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: var(--paper);
+}
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a2738' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+}
+.form-textarea { min-height: 70px; resize: vertical; font-family: inherit; }
+
+.radio-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 200ms var(--ease);
+  flex: 1;
+  min-width: 140px;
+}
+.radio-option:has(input:checked) {
+  border-color: var(--orange);
+  background: var(--orange-tint);
+  color: var(--orange-deep);
+}
+.radio-option input { position: absolute; opacity: 0; width: 0; height: 0; }
+.radio-option .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 200ms var(--ease);
+}
+.radio-option input:checked + .dot {
+  border-color: var(--orange);
+}
+.radio-option input:checked + .dot::after {
+  content: '';
+  position: absolute;
+  inset: 2.5px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.radio-option input[type="checkbox"] + .dot {
+  border-radius: 3px;
+}
+.radio-option input[type="checkbox"]:checked + .dot::after {
+  border-radius: 1.5px;
+}
+
+/* Dirección con Google Places (clásico) */
+.address-field-wrap {
+  position: relative;
+}
+.address-field-wrap .pac-container {
+  border-radius: 0 0 3px 3px;
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+  font-family: 'Inter', sans-serif;
+  z-index: 30;
+}
+.pac-item {
+  padding: 0.6rem 0.8rem;
+  font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+.pac-item:hover {
+  background: var(--orange-tint);
+}
+.pac-item-query {
+  color: var(--blue);
+  font-weight: 500;
+}
+.pac-matched {
+  font-weight: 600;
+}
+
+.address-map-btn {
+  align-self: flex-start;
+  margin-top: 0.3rem;
+  font: 500 12px/1 'Inter', sans-serif;
+  color: var(--blue);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-soft);
+  padding: 0.5rem 0.8rem;
+  border-radius: 3px;
+  transition: all 200ms var(--ease);
+}
+.address-map-btn:hover { border-color: var(--blue); background: var(--blue-tint); }
+
+.submit-btn {
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--orange);
+  color: white;
+  font: 700 13px/1 'Inter', sans-serif;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 14px rgba(232, 93, 31, 0.4);
+  transition: background 250ms var(--ease), transform 150ms var(--ease), box-shadow 250ms var(--ease);
+}
+.submit-btn:hover:not(:disabled) { background: var(--orange-deep); box-shadow: 0 6px 20px rgba(232, 93, 31, 0.55); transform: translateY(-1px); }
+.submit-btn:active:not(:disabled) { transform: scale(0.98); }
+.submit-btn:disabled { background: var(--line-strong); color: var(--text-faint); cursor: not-allowed; box-shadow: none; }
+
+/* Map modal */
+.map-modal-body {
+  padding: 1.25rem 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+#address-map {
+  width: 100%;
+  height: 320px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+.map-address-preview {
+  font: 400 13px/1.5 'Inter', sans-serif;
+  color: var(--text-soft);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.7rem 0.9rem;
+}
+.map-hint {
+  font: 300 11px/1.5 'Inter', sans-serif;
+  color: var(--text-faint);
+}
+
+/* Loading / error state */
+.state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 1rem;
+  gap: 1rem;
+}
+.state-spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  border-top-color: var(--orange);
+  animation: spin 800ms linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.state-title {
+  font: 500 1.3rem/1.2 'Cormorant Garamond', serif;
+  color: var(--blue);
+}
+.state-text {
+  font: 300 13px/1.6 'Inter', sans-serif;
+  color: var(--text-soft);
+  max-width: 42ch;
+}
+.state-error .state-title { color: var(--danger); }
+.state-error .state-text a { color: var(--orange); border-bottom: 1px solid var(--orange-soft); text-decoration: none; }
+
+/* FAB siempre visible */
+.cart-fab {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background: var(--blue);
+  color: white;
+  border-radius: 999px;
+  padding: 0.85rem 1.25rem 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  transition: transform 250ms var(--ease), background 250ms var(--ease);
+}
+.cart-fab:hover { background: var(--blue-deep); transform: translateY(-2px); }
+.cart-fab-icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+.cart-fab-icon svg { width: 100%; height: 100%; }
+.cart-fab-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--orange);
+  color: white;
+  font: 700 10px/1 'Inter', sans-serif;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--blue);
+}
+.cart-fab-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.cart-fab-count {
+  font: 500 9px/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.65;
+  margin-bottom: 3px;
+}
+.cart-fab-amount { font: 500 14px/1 'Inter', sans-serif; }
+
+/* Modales */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 24, 37, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1rem;
+}
+.modal-backdrop.is-open { display: flex; }
+.modal {
+  background: var(--paper);
+  border-radius: 4px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 400ms var(--ease);
+}
+.modal.wide { max-width: 600px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.modal-head {
+  background: var(--blue);
+  color: white;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.modal-head-title {
+  font: 500 11px/1 'Inter', sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.modal-close {
+  width: 28px;
+  height: 28px;
+  color: white;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transition: background 200ms var(--ease);
+}
+.modal-close:hover { background: rgba(255,255,255,0.15); }
+.modal-close svg { width: 14px; height: 14px; }
+
+/* Dentro del modal, el carrito mantiene su estilo de tarjeta, pero ocultamos su cabecera */
+#modal-cart-body .cart {
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-md);
+  border-radius: 6px;
+  background: var(--paper);
+  overflow: hidden;
+  position: relative;
+}
+#modal-cart-body .cart::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-soft), var(--orange));
+}
+#modal-cart-body .cart-head { display: none; }
+#modal-cart-body .cart-body {
+  max-height: none;
+  overflow-y: visible;
+  padding-top: 0.75rem;
+}
+
+.confirm-modal { text-align: center; }
+.confirm-modal .modal-head {
+  background: var(--success);
+  justify-content: center;
+}
+.confirm-icon {
+  width: 64px; height: 64px;
+  margin: 2rem auto 1rem;
+  border-radius: 50%;
+  background: rgba(46, 125, 82, 0.1);
+  display: grid;
+  place-items: center;
+  color: var(--success);
+}
+.confirm-icon svg { width: 28px; height: 28px; }
+.confirm-title {
+  font: 400 2rem/1.1 'Cormorant Garamond', serif;
+  color: var(--blue);
+  margin-bottom: 0.6rem;
+  padding: 0 2rem;
+}
+.confirm-text {
+  font: 300 14px/1.55 'Inter', sans-serif;
+  color: var(--text-soft);
+  padding: 0 2rem;
+  max-width: 38ch;
+  margin: 0 auto 1.5rem;
+}
+.confirm-detail {
+  background: var(--bg-soft);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.confirm-detail div { display: flex; flex-direction: column; gap: 0.3rem; }
+.confirm-detail dt {
+  font: 500 10px/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.confirm-detail dd {
+  font: 500 14px/1 'Inter', sans-serif;
+  color: var(--blue);
+}
+.confirm-actions { padding: 1.5rem 2rem 2rem; }
+.confirm-btn {
+  width: 100%;
+  padding: 0.95rem;
+  background: var(--blue);
+  color: white;
+  font: 600 12px/1 'Inter', sans-serif;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  transition: background 250ms var(--ease);
+}
+.confirm-btn:hover { background: var(--blue-deep); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px) scale(0.96);
+  background: var(--blue);
+  color: white;
+  padding: 0.9rem 1.5rem;
+  border-radius: 6px;
+  font: 700 14.5px/1.4 'Inter', sans-serif;
+  letter-spacing: 0.01em;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.12);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+  z-index: 300;
+  max-width: 90vw;
+  text-align: center;
+}
+.toast.is-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+.toast.is-error {
+  background: var(--danger);
+  border-color: #ffffff40;
+  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.1), 0 24px 60px rgba(192, 57, 43, 0.35);
+}
+.toast.is-success {
+  background: var(--success);
+  box-shadow: 0 4px 12px rgba(46, 125, 82, 0.1), 0 24px 60px rgba(46, 125, 82, 0.35);
+}
+
+/* Footer */
+.foot {
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  font: 300 12px/1.5 'Inter', sans-serif;
+  color: var(--text-faint);
+}
+.foot a { color: var(--text-soft); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .layout { padding: 1.5rem; }
+  .masthead-inner { grid-template-columns: 1fr; padding: 2rem 1.5rem; gap: 1.5rem; }
+  .brand-name { font-size: 3.5rem; }
+  .meta-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem 1.5rem; }
+  .category-title { font-size: 2rem; }
+  .modal { max-width: 100%; }
+  .cart-fab { bottom: 1rem; right: 1rem; padding: 0.75rem 1rem 0.75rem 0.85rem; }
+  .cart-fab-amount { font-size: 13px; }
+}
+@media (max-width: 640px) {
+  .brand-name { font-size: 2.75rem; }
+  .meta-grid { grid-template-columns: 1fr; }
+  .product-grid { grid-template-columns: 1fr; }
+  .confirm-detail { gap: 1.5rem; padding: 1rem 1.5rem; }
+  .confirm-title { font-size: 1.65rem; padding: 0 1.5rem; }
+  .confirm-text { padding: 0 1.5rem; }
+  .confirm-actions { padding: 1.25rem 1.5rem 1.5rem; }
+  .cart-form { padding: 1rem 1.25rem 1.25rem; }
+  .cart-body { padding: 0.5rem 1rem; }
+  .cart-head { padding: 1rem 1.25rem; }
+  .cart-total { padding: 0.85rem 1.25rem; }
+  .option-row { flex-direction: column; align-items: stretch; gap: 0.3rem; }
+  .option-select { max-width: 100%; }
+}
+
+/* Ajuste específico para alinear correctamente los campos puerta y piso */
+.form-row.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  align-items: start;
+}
+.form-row.two-col .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.form-row.two-col .form-row label {
+  margin-bottom: 0;
+}
+/* En móvil, si la pantalla es muy pequeña, que se apilen */
+@media (max-width: 480px) {
+  .form-row.two-col {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .state-spinner { animation: none; border-top-color: var(--orange); }
+}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand-block">
+      <div class="brand-eyebrow" data-txt="eyebrow">Rostissería artesana · desde 1998</div>
+      <!-- Envolvemos el logo y el título en un flexbox para que estén lado a lado -->
+      <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 0.15rem;">
+        <img id="public-brand-logo" src="" alt="Logo" style="display:none; max-height: 70px; width: auto; object-fit: contain;">
+        <h1 class="brand-name" data-txt="brand_name" id="public-brand-name" style="margin-bottom: 0;">XATELIER</h1>
+      </div>
+      <p class="brand-tagline" data-txt="tagline">Pollería y rotisería de barrio. Pollos y carnes al horno, croquetas caseras y guarniciones para llevar a casa fines de semana y festivos.</p>
+    </div>
+    <dl class="meta-grid">
+      <div class="meta-item">
+        <dt>Dirección</dt>
+        <dd data-txt="direccion">Carrer d'Alexandre Galí, 34, Loc F, Can Boada, 08225 Terrassa, Barcelona</dd>
+      </div>
+      <div class="meta-item">
+        <dt>Horario</dt>
+        <dd data-txt="horario">Lun a Sáb · 11:00 – 21:30</dd>
+      </div>
+      <div class="meta-item">
+        <dt>Teléfono</dt>
+        <dd><a href="tel:+34692 12 13 00" data-txt="telefono" data-tel-link="1">971 452 218</a></dd>
+      </div>
+      <div class="meta-item">
+        <dt>Instagram</dt>
+        <dd><a href="#" target="_blank" rel="noopener" data-txt="instagram" data-ig-link="1">@rostisseriaxatelier</a></dd>
+      </div>
+    </dl>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="menu-column">
+    <div id="menu-root">
+      <div class="state-block">
+        <div class="state-spinner"></div>
+        <div class="state-title" data-txt="loading_title">Cargando la carta…</div>
+        <p class="state-text" data-txt="loading_text">Estamos consultando los productos disponibles de hoy. Tardará menos de un segundo.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="cart-fab" id="cart-fab" aria-label="Abrir carrito">
+  <div class="cart-fab-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 3h2l2.4 12.6a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L22 7H6"/>
+      <circle cx="9" cy="20" r="1.2"/>
+      <circle cx="18" cy="20" r="1.2"/>
+    </svg>
+    <span class="cart-fab-badge" id="fab-badge">0</span>
+  </div>
+  <div class="cart-fab-text">
+    <span class="cart-fab-count" data-txt="cart_label">Tu pedido</span>
+    <span class="cart-fab-amount" id="fab-amount">0,00 €</span>
+  </div>
+</button>
+
+<div class="modal-backdrop" id="cart-modal">
+  <div class="modal wide">
+    <div class="modal-head">
+      <span class="modal-head-title" id="modal-cart-title">Tu pedido</span>
+      <button class="modal-close" id="modal-close" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+    <div id="modal-cart-body"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="confirm-modal">
+  <div class="modal confirm-modal">
+    <div class="modal-head">
+      <span class="modal-head-title">Pedido confirmado</span>
+    </div>
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"/></svg>
+    </div>
+    <div class="confirm-title" data-txt="confirm_title">Gracias por tu pedido</div>
+    <p class="confirm-text" data-txt="confirm_text">Hemos recibido tu pedido correctamente. El restaurante ya lo ha registrado y la elaboración ha comenzado. Te esperamos.</p>
+    <dl class="confirm-detail">
+      <div><dt>Nº pedido</dt><dd id="confirm-num">—</dd></div>
+      <div><dt>Hora</dt><dd id="confirm-time">—</dd></div>
+    </dl>
+    <div class="confirm-actions">
+      <button class="confirm-btn" id="confirm-close" data-txt="confirm_btn">Volver a la carta</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="map-modal">
+  <div class="modal wide">
+    <div class="modal-head">
+      <span class="modal-head-title">Ajusta la ubicación en el mapa</span>
+      <button class="modal-close" id="map-modal-close" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+    <div class="map-modal-body">
+      <div id="address-map"></div>
+      <p class="map-hint" data-txt="map_hint">Arrastra el marcador para ajustar la ubicación exacta de entrega.</p>
+      <div class="map-address-preview" id="map-address-preview">Selecciona una dirección en el autocompletado o arrastra el marcador.</div>
+      <button type="button" class="confirm-btn" id="map-confirm-btn" disabled>Confirmar esta ubicación</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer class="foot">
+  XATELIER Rostissería · Carrer de Mallorca 241, Palma · <a href="tel:+34971452218">971 452 218</a> · <span data-txt="footer_texto">Pedidos para recogida y envío a domicilio dentro del municipio.</span>
+</footer>
+
+<script>
+/* ================================================================
+   CONFIGURACIÓN
+   ================================================================ */
+const API_BASE = '';  // si el backend está en el mismo dominio, dejar vacío
+const MENU_URL = API_BASE + '/api/menu';
+const ORDER_URL = API_BASE + '/api/pedido';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyAbtZRmLZ-MQabLbJvlCjREzRpU_2c1X8E'; // Reemplazar con tu clave
+
+let DELIVERY_FEE = 3.50;
+let IMPORTE_MINIMO_DOMICILIO = 18.0;
+const DEFAULT_EMAIL = 'cliente@xatelier.com';
+let TEXTOS_WEB = {};
+function txt(key, fallback) {
+  return (TEXTOS_WEB && TEXTOS_WEB[key]) || fallback;
+}
+
+/* ================================================================
+   ESTADO
+   ================================================================ */
+let menuData = null;
+let activeFlavors = [];
+let cart = [];
+let formState = {
+  method: 'recogida',
+  date: new Date().toISOString().split('T')[0],
+  time: '',
+  name: '',
+  phone: '',
+  address: '',
+  lat: null,
+  lng: null,
+  piso: '',
+  puerta: '',
+  escalera: '',
+  bloque: '',
+  esCasa: false,
+  notes: ''
+};
+
+let flavorSelections = {};
+let ultimoMenuJSON = null;
+
+// Variables para Google Maps (clásico)
+let autocomplete = null;        // google.maps.places.Autocomplete
+let placeSelected = null;       // objeto con {formatted_address, lat, lng, place_id}
+let mapModalMap = null;
+let mapModalMarker = null;
+let mapModalGeocoder = null;
+let mapModalInfo = null;
+let mapsReady = false;
+let mapsInitAttempts = 0;
+let autocompleteInputEl = null;  // referencia al <input> realmente vinculado al autocomplete
+
+/* ================================================================
+   UTILIDADES
+   ================================================================ */
+function fmt(n) {
+  return (Math.round(n * 100) / 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
+function $(sel, root = document) { return root.querySelector(sel); }
+function $$(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+
+function showToast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.remove('is-error', 'is-success');
+  if (msg.startsWith('❌') || /no está disponible|no se pudo|Error|Debes elegir|requiere un menú|Solo qued|Ya tienes en el carrito/i.test(msg)) {
+    t.classList.add('is-error');
+  } else if (/añadido al pedido|✓/.test(msg)) {
+    t.classList.add('is-success');
+  }
+  t.classList.add('is-show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('is-show'), 2800);
+}
+
+function findProduct(id) {
+  if (!menuData) return null;
+  for (const cat of menuData) {
+    const found = cat.items.find(p => p.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
+function hasMenuInCart() {
+  return cart.some(item => {
+    const p = findProduct(item.baseId);
+    return p && (p.id.startsWith('m') || p.id.startsWith('c'));
+  });
+}
+
+function productRequiresMenu(product) {
+  return product.requires_menu === true;
+}
+
+function isProductActive(product) {
+  return product.activo === true;
+}
+
+function getCartQtyForProduct(baseId) {
+  return cart.reduce((sum, it) => it.baseId === baseId ? sum + it.qty : sum, 0);
+}
+
+function unidadStock(product) {
+  return (product && product.stock_unit) || 1;
+}
+
+function poolConsumidoEnCarrito(product) {
+  if (!product) return 0;
+  return cart.reduce((sum, it) => {
+    const p = findProduct(it.baseId);
+    if (!p) return sum;
+    const mismoGrupo = product.stock_group ? p.stock_group === product.stock_group : p.id === product.id;
+    if (!mismoGrupo) return sum;
+    return sum + it.qty * unidadStock(p);
+  }, 0);
+}
+
+function getStockDisponible(product) {
+  if (!product || product.stock === null || product.stock === undefined) return null;
+  const restantePool = product.stock - poolConsumidoEnCarrito(product);
+  return restantePool / unidadStock(product);
+}
+
+/* ================================================================
+   CARGA DE CONFIGURACIÓN PÚBLICA
+   ================================================================ */
+async function loadConfig() {
+  try {
+    const r = await fetch(API_BASE + '/api/config-publica');
+    if (r.ok) {
+      const c = await r.json();
+      if (c.delivery_fee !== undefined) DELIVERY_FEE = parseFloat(c.delivery_fee);
+      if (c.importe_minimo_domicilio !== undefined) IMPORTE_MINIMO_DOMICILIO = parseFloat(c.importe_minimo_domicilio);
+
+      if (c.logo_url) {
+        $('#public-brand-logo').src = API_BASE + c.logo_url;
+        $('#public-brand-logo').style.display = 'block';
+      } else {
+        $('#public-brand-logo').style.display = 'none';
+      }
+      // El nombre siempre se muestra, haya o no haya logo
+      $('#public-brand-name').style.display = 'block';
+    }
+  } catch(e) {
+    console.error("Error cargando config", e);
+  }
+}
+
+/* ================================================================
+   CARGA DE TEXTOS EDITABLES (desde Cocina > Configuración)
+   ================================================================ */
+async function loadTextos() {
+  try {
+    const r = await fetch(API_BASE + '/api/textos');
+    if (r.ok) {
+      TEXTOS_WEB = await r.json();
+      aplicarTextos();
+    }
+  } catch (e) {
+    console.error("Error cargando textos", e);
+  }
+}
+
+function aplicarTextos() {
+  $$('[data-txt]').forEach(el => {
+    const key = el.getAttribute('data-txt');
+    const valor = TEXTOS_WEB[key];
+    if (valor === undefined || valor === null || valor === '') return;
+    el.textContent = valor;
+
+    // Si es enlace de teléfono
+    if (el.hasAttribute('data-tel-link')) {
+      el.setAttribute('href', 'tel:' + valor.replace(/[^0-9+]/g, ''));
+    }
+    // Si es enlace de Instagram
+    else if (el.hasAttribute('data-ig-link')) {
+      const cleanUser = valor.replace('@', '').trim();
+      el.setAttribute('href', 'https://instagram.com/' + cleanUser);
+    }
+
+  });
+  // Refresca textos generados dinámicamente por JS (no cubiertos por data-txt)
+  if ($('#modal-cart-title')) renderCart();
+}
+
+/* ================================================================
+   CARGA Y RENDERIZADO DEL MENÚ
+   ================================================================ */
+async function loadMenu(isBackgroundRefresh = false) {
+  const root = $('#menu-root');
+  try {
+    const dateParam = formState.date || '';
+    const url = dateParam ? `${MENU_URL}?fecha=${dateParam}` : MENU_URL;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('Error al cargar el menú');
+    const data = await resp.json();
+
+    const snapshot = JSON.stringify(data);
+    if (isBackgroundRefresh && snapshot === ultimoMenuJSON) {
+      return;
+    }
+    ultimoMenuJSON = snapshot;
+
+    const flavorsObj = data.find(item => item.sabores_activos !== undefined);
+    if (flavorsObj) {
+      activeFlavors = flavorsObj.sabores_activos || [];
+      menuData = data.filter(item => item.sabores_activos === undefined);
+    } else {
+      activeFlavors = [];
+      menuData = data;
+    }
+
+    const cartChanged = reconcileCartWithStock();
+    renderMenu();
+    if (isBackgroundRefresh && !cartChanged && hayInteraccionDireccionActiva()) {
+      observeCategories();
+      return;
+    }
+    renderCart();
+    observeCategories();
+  } catch (err) {
+    if (isBackgroundRefresh) return;
+    root.innerHTML = `
+      <div class="state-block state-error">
+        <div class="state-title">No hemos podido cargar la carta</div>
+        <p class="state-text">Parece que hay un problema de conexión con el servidor. Intenta recargar la página en unos segundos o llámanos directamente al <a href="tel:+34971452218">971 452 218</a> y te tomamos el pedido por teléfono.</p>
+      </div>`;
+  }
+}
+
+function reconcileCartWithStock() {
+  let avisos = [];
+  for (let i = cart.length - 1; i >= 0; i--) {
+    const item = cart[i];
+    const product = findProduct(item.baseId);
+    if (!product || !isProductActive(product)) {
+      avisos.push(`"${item.name}" ya no está disponible y se ha quitado del carrito.`);
+      cart.splice(i, 1);
+    }
+  }
+  const gruposVistos = new Set();
+  cart.forEach(it => {
+    const product = findProduct(it.baseId);
+    if (!product || product.stock === null || product.stock === undefined) return;
+    const clave = product.stock_group || product.id;
+    if (gruposVistos.has(clave)) return;
+    gruposVistos.add(clave);
+    let exceso = poolConsumidoEnCarrito(product) - product.stock;
+    if (exceso <= 1e-9) return;
+    for (let i = cart.length - 1; i >= 0 && exceso > 1e-9; i--) {
+      const linea = cart[i];
+      const p = findProduct(linea.baseId);
+      if (!p || (p.stock_group || p.id) !== clave) continue;
+      const unidad = unidadStock(p);
+      const unidadesAQuitar = Math.min(linea.qty, Math.ceil(exceso / unidad - 1e-9));
+      if (unidadesAQuitar <= 0) continue;
+      linea.qty -= unidadesAQuitar;
+      exceso -= unidadesAQuitar * unidad;
+    }
+    cart = cart.filter(it2 => it2.qty > 0);
+    avisos.push(`Solo quedan ${product.stock} unidad(es) de "${product.name}": hemos ajustado tu carrito.`);
+  });
+  if (avisos.length > 0) showToast(avisos[0]);
+  return avisos.length > 0;
+}
+
+function renderMenu() {
+  const root = $('#menu-root');
+  if (!menuData || menuData.length === 0) {
+    root.innerHTML = `<div class="state-block"><div class="state-title">No hay productos disponibles</div></div>`;
+    return;
+  }
+  let html = `<nav class="cat-nav" id="cat-nav">`;
+  menuData.forEach(cat => {
+    html += `<button class="cat-pill" data-target="${cat.category}">${cat.category}</button>`;
+  });
+  html += `</nav><div class="menu-list">`;
+  menuData.forEach(cat => {
+    const catId = 'cat-' + cat.category.replace(/\s+/g, '-');
+    html += `
+      <section class="category" id="${catId}" data-cat="${cat.category}">
+        <header class="category-head">
+          <div class="category-eyebrow">${cat.subtitle ? 'Especialidad' : ''}</div>
+          <h2 class="category-title">${cat.category}</h2>
+          ${cat.subtitle ? `<p class="category-subtitle">${cat.subtitle}</p>` : ''}
+          <div class="category-rule"></div>
+        </header>
+        <div class="product-grid">
+          ${cat.items.map(p => renderProduct(p)).join('')}
+        </div>
+      </section>`;
+  });
+  html += `</div>`;
+  root.innerHTML = html;
+  attachProductHandlers();
+  attachCatNavHandlers();
+}
+
+function renderProduct(product) {
+  if (!isProductActive(product)) {
+    return `
+      <article class="product is-out" data-product="${product.id}">
+        ${product.image_url ? `<img class="product-photo" src="${API_BASE}${product.image_url}" alt="${product.name}" loading="lazy">` : ''}
+        <div class="product-head">
+          <h3 class="product-name">${product.name}</h3>
+          <div class="product-price-block"><span class="product-price-out">Agotado</span></div>
+        </div>
+        <p class="product-desc">${product.desc || ''}</p>
+        <div class="product-foot">
+          <span class="product-locked-note">Vuelve mañana o llama para reservar</span>
+          <button class="product-add" disabled aria-label="Producto agotado">—</button>
+        </div>
+      </article>`;
+  }
+
+  const requiresMenu = productRequiresMenu(product) && !hasMenuInCart();
+  const hasOptions = product.options && product.options.length > 0;
+  const hasFlavors = (product.croquetasReq || product.croquetasMin) && activeFlavors.length > 0;
+
+  let priceDisplay = '';
+  if (product.priceText) {
+    priceDisplay = product.priceText;
+  } else if (product.price !== undefined) {
+    priceDisplay = fmt(product.price);
+  } else {
+    priceDisplay = '—';
+  }
+
+  return `
+    <article class="product" data-product="${product.id}">
+      ${product.image_url ? `<img class="product-photo" src="${API_BASE}${product.image_url}" alt="${product.name}" loading="lazy">` : ''}
+      <div class="product-head">
+        <h3 class="product-name">${product.name}</h3>
+        <div class="product-price-block">
+          <span class="product-price" id="price-${product.id}">${priceDisplay}</span>
+        </div>
+      </div>
+      <p class="product-desc">${product.desc || ''}</p>
+      ${hasOptions ? renderOptions(product) : ''}
+      ${hasFlavors ? renderFlavorPanel(product) : ''}
+      <div class="product-foot">
+        ${requiresMenu ? `<span class="product-locked-note">Añade primero un menú o combo</span>` : `<span></span>`}
+        <button class="product-add" data-add="${product.id}" ${requiresMenu ? 'disabled' : ''} aria-label="Añadir ${product.name}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+    </article>`;
+}
+
+function renderOptions(product) {
+  if (!window._optionSelections) window._optionSelections = {};
+  if (!window._optionSelections[product.id]) {
+    window._optionSelections[product.id] = {};
+    product.options.forEach(opt => {
+      if (opt.choices && opt.choices.length > 0) {
+        window._optionSelections[product.id][opt.id] = opt.choices[0].id;
+      }
+    });
+  }
+  const sel = window._optionSelections[product.id];
+  return `<div class="product-options">${product.options.map(opt => {
+    const current = sel[opt.id] || (opt.choices[0] ? opt.choices[0].id : '');
+    return `
+      <div class="option-group">
+        <div class="option-label">${opt.label}</div>
+        <div class="option-buttons">
+          ${opt.choices.map(c => `
+            <button type="button"
+                    class="opt-btn ${current === c.id ? 'active' : ''}"
+                    data-option="${opt.id}"
+                    data-choice="${c.id}"
+                    data-product="${product.id}">
+              ${c.name}${c.price > 0 ? ` (+${fmt(c.price)})` : ''}
+            </button>
+          `).join('')}
+        </div>
+      </div>`;
+  }).join('')}</div>`;
+}
+
+function renderFlavorPanel(product) {
+  const key = product.id;
+  if (!flavorSelections[key]) {
+    flavorSelections[key] = {};
+    activeFlavors.forEach(f => flavorSelections[key][f] = 0);
+  }
+  const sel = flavorSelections[key];
+  const total = Object.values(sel).reduce((a, b) => a + b, 0);
+  const required = product.croquetasReq || 0;
+  const min = product.croquetasMin || 0;
+  const isComplete = required > 0 ? total === required : total >= min;
+  const isOver = required > 0 ? total > required : false;
+
+  let counterText = '';
+  if (required > 0) {
+    counterText = `${total} / ${required}`;
+  } else if (min > 0) {
+    counterText = `${total} (Mín. ${min})`;
+  } else {
+    counterText = `${total}`;
+  }
+
+  let dynamicPrice = product.price || 0;
+  if (min > 0 && total >= min) {
+    const extraPrice = product.extraPrice || 0;
+    if (required === 0 && min === 1) {
+      dynamicPrice = total * (product.price || 1.25);
+    } else {
+      dynamicPrice = product.price + (total - min) * extraPrice;
+    }
+  }
+  const priceEl = $(`#price-${product.id}`);
+  if (priceEl && !product.priceText) {
+    priceEl.textContent = fmt(dynamicPrice);
+  }
+
+  return `
+    <div class="flavor-panel" id="flavor-panel-${product.id}">
+      <div class="flavor-head">
+        <span class="flavor-head-label">Sabores</span>
+        <span class="flavor-counter ${isComplete ? 'is-complete' : ''} ${isOver ? 'is-over' : ''}"><strong>${total}</strong> / ${required || min}</span>
+      </div>
+      <div class="flavor-list">
+        ${activeFlavors.map(f => {
+          const qty = sel[f] || 0;
+          const atMax = required > 0 ? total >= required : false;
+          return `
+            <div class="flavor-row">
+              <span class="flavor-name">${f}</span>
+              <div class="flavor-controls">
+                <button class="flavor-btn" data-flavor-dec="${f}" data-product="${product.id}" ${qty === 0 ? 'disabled' : ''} aria-label="Quitar ${f}">−</button>
+                <span class="flavor-qty">${qty}</span>
+                <button class="flavor-btn" data-flavor-inc="${f}" data-product="${product.id}" ${atMax ? 'disabled' : ''} aria-label="Añadir ${f}">+</button>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function refreshFlavorPanel(productId) {
+  const product = findProduct(productId);
+  if (!product) return;
+  const oldPanel = $(`#flavor-panel-${productId}`);
+  if (!oldPanel) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = renderFlavorPanel(product);
+  const newPanel = tmp.firstElementChild;
+  oldPanel.replaceWith(newPanel);
+  $$('[data-flavor-inc]', newPanel).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.product;
+      const fid = btn.dataset.flavorInc;
+      const prod = findProduct(pid);
+      if (!prod) return;
+      if (!flavorSelections[pid]) flavorSelections[pid] = {};
+      const total = Object.values(flavorSelections[pid]).reduce((a, b) => a + b, 0);
+      const required = prod.croquetasReq || 0;
+      if (required > 0 && total >= required) return;
+      flavorSelections[pid][fid] = (flavorSelections[pid][fid] || 0) + 1;
+      refreshFlavorPanel(pid);
+    });
+  });
+  $$('[data-flavor-dec]', newPanel).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.product;
+      const fid = btn.dataset.flavorDec;
+      if (!flavorSelections[pid]) return;
+      if (!flavorSelections[pid][fid]) return;
+      flavorSelections[pid][fid]--;
+      if (flavorSelections[pid][fid] <= 0) delete flavorSelections[pid][fid];
+      refreshFlavorPanel(pid);
+    });
+  });
+  updateProductPrice(productId);
+}
+
+function updateProductPrice(productId) {
+  const product = findProduct(productId);
+  if (!product || product.priceText) return;
+  const priceEl = $(`#price-${productId}`);
+  if (!priceEl) return;
+  const sel = flavorSelections[productId] || {};
+  const total = Object.values(sel).reduce((a, b) => a + b, 0);
+  const min = product.croquetasMin || 0;
+  const required = product.croquetasReq || 0;
+  let price = product.price || 0;
+  if (min > 0 && total >= min) {
+    const extraPrice = product.extraPrice || 0;
+    if (required === 0 && min === 1) {
+      price = total * (product.price || 1.25);
+    } else {
+      price = product.price + (total - min) * extraPrice;
+    }
+  }
+  priceEl.textContent = fmt(price);
+}
+
+function attachProductHandlers() {
+  $$('[data-add]').forEach(btn => {
+    btn.addEventListener('click', () => tryAddToCart(btn.dataset.add));
+  });
+  $$('.opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const productId = btn.dataset.product;
+        const optionId = btn.dataset.option;
+        const choiceId = btn.dataset.choice;
+
+        // Actualizar estado en JS
+        if (!window._optionSelections) window._optionSelections = {};
+        if (!window._optionSelections[productId]) window._optionSelections[productId] = {};
+        window._optionSelections[productId][optionId] = choiceId;
+
+        // Actualizar la interfaz (marcar este botón como activo y desmarcar los demás del grupo)
+        const container = btn.closest('.option-buttons');
+        container.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Actualizar el precio dinámico si aplica
+        updateProductPrice(productId);
+      });
+    });
+  $$('[data-flavor-inc]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.product;
+      const fid = btn.dataset.flavorInc;
+      const prod = findProduct(pid);
+      if (!prod) return;
+      if (!flavorSelections[pid]) flavorSelections[pid] = {};
+      const total = Object.values(flavorSelections[pid]).reduce((a, b) => a + b, 0);
+      const required = prod.croquetasReq || 0;
+      if (required > 0 && total >= required) return;
+      flavorSelections[pid][fid] = (flavorSelections[pid][fid] || 0) + 1;
+      refreshFlavorPanel(pid);
+    });
+  });
+  $$('[data-flavor-dec]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.product;
+      const fid = btn.dataset.flavorDec;
+      if (!flavorSelections[pid]) return;
+      if (!flavorSelections[pid][fid]) return;
+      flavorSelections[pid][fid]--;
+      if (flavorSelections[pid][fid] <= 0) delete flavorSelections[pid][fid];
+      refreshFlavorPanel(pid);
+    });
+  });
+}
+
+function attachCatNavHandlers() {
+  $$('#cat-nav .cat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const target = pill.dataset.target;
+      const el = $(`[data-cat="${target}"]`);
+      if (el) {
+        const offset = 80;
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+}
+
+function observeCategories() {
+  const cats = $$('.category');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('is-in');
+    });
+  }, { threshold: 0.05 });
+  cats.forEach(c => io.observe(c));
+
+  const io2 = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const catName = e.target.dataset.cat;
+        $$('#cat-nav .cat-pill').forEach(p => p.classList.toggle('active', p.dataset.target === catName));
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px' });
+  cats.forEach(c => io2.observe(c));
+}
+
+/* ================================================================
+   GOOGLE PLACES AUTOCOMPLETE (clásico)
+   ================================================================ */
+function initAutocomplete() {
+  // Si google no está cargado, reintentar
+  if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+    if (mapsInitAttempts < 10) {
+      mapsInitAttempts++;
+      setTimeout(initAutocomplete, 500);
+    }
+    return;
+  }
+  mapsReady = true;
+
+  const input = document.getElementById('f-address');
+  if (!input) return;
+
+  if (autocomplete && autocompleteInputEl === input) {
+    return;
+  }
+
+  if (autocomplete) {
+    google.maps.event.clearInstanceListeners(autocomplete);
+    autocomplete = null;
+    autocompleteInputEl = null;
+  }
+
+  document.querySelectorAll('.pac-container').forEach(el => el.remove());
+
+  const bounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(41.52, 1.96),
+    new google.maps.LatLng(41.61, 2.06)
+  );
+
+  autocomplete = new google.maps.places.Autocomplete(input, {
+    types: ['address'],
+    componentRestrictions: { country: 'es' },
+    bounds: bounds
+  });
+  autocompleteInputEl = input;
+
+  if (formState.address) {
+    input.value = formState.address;
+  } else {
+    input.value = '';
+  }
+
+  autocomplete.addListener('place_changed', onPlaceChanged);
+
+  input.addEventListener('input', function onInput() {
+    if (placeSelected && input.value !== placeSelected.formatted_address) {
+      placeSelected = null;
+      formState.lat = null;
+      formState.lng = null;
+      refreshLiveUI();
+    }
+  });
+}
+
+function onPlaceChanged() {
+  const place = autocomplete.getPlace();
+  if (!place || !place.geometry) {
+    showToast('No se pudo obtener la dirección. Inténtalo de nuevo.');
+    return;
+  }
+  const lat = place.geometry.location.lat();
+  const lng = place.geometry.location.lng();
+  const formatted = place.formatted_address || place.name || '';
+  placeSelected = {
+    formatted_address: formatted,
+    lat: lat,
+    lng: lng,
+    place_id: place.place_id || ''
+  };
+  formState.lat = lat;
+  formState.lng = lng;
+  formState.address = formatted;
+
+  const input = document.getElementById('f-address');
+  if (input) input.value = formatted;
+
+  refreshLiveUI();
+
+  if (document.getElementById('map-modal').classList.contains('is-open')) {
+    actualizarMapaModal(lat, lng);
+  }
+}
+
+/* ================================================================
+   MAPA MODAL
+   ================================================================ */
+function abrirMapaModal() {
+  if (!placeSelected) {
+    showToast('Primero selecciona una dirección en el autocompletado.');
+    return;
+  }
+  document.getElementById('map-modal').classList.add('is-open');
+  const lat = placeSelected.lat;
+  const lng = placeSelected.lng;
+  if (!mapModalMap) {
+    mapModalMap = new google.maps.Map(document.getElementById('address-map'), {
+      center: { lat, lng },
+      zoom: 16,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false
+    });
+    mapModalGeocoder = new google.maps.Geocoder();
+    mapModalMap.addListener('click', (e) => {
+      const latLng = e.latLng;
+      actualizarMapaModal(latLng.lat(), latLng.lng());
+    });
+  } else {
+    mapModalMap.setCenter({ lat, lng });
+    mapModalMap.setZoom(16);
+  }
+  actualizarMapaModal(lat, lng);
+}
+
+function actualizarMapaModal(lat, lng) {
+  if (!mapModalMap) return;
+  if (mapModalMarker) {
+    mapModalMarker.setPosition({ lat, lng });
+  } else {
+    mapModalMarker = new google.maps.Marker({
+      position: { lat, lng },
+      map: mapModalMap,
+      draggable: true
+    });
+    mapModalMarker.addListener('dragend', () => {
+      const pos = mapModalMarker.getPosition();
+      reverseGeocodeMapaModal(pos.lat(), pos.lng());
+    });
+  }
+  mapModalMap.panTo({ lat, lng });
+  reverseGeocodeMapaModal(lat, lng);
+}
+
+function reverseGeocodeMapaModal(lat, lng) {
+  if (!mapModalGeocoder) {
+    mapModalGeocoder = new google.maps.Geocoder();
+  }
+  mapModalGeocoder.geocode({ location: { lat, lng } }, (results, status) => {
+    const preview = document.getElementById('map-address-preview');
+    const confirmBtn = document.getElementById('map-confirm-btn');
+    if (status === 'OK' && results.length > 0) {
+      const terrassaResults = results.filter(r => {
+        const comps = r.address_components || [];
+        const locality = comps.find(c => c.types.includes('locality'));
+        return locality && /terrassa|tarrasa/i.test(locality.long_name);
+      });
+      const result = terrassaResults.length > 0 ? terrassaResults[0] : results[0];
+      const formatted = result.formatted_address || `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+      preview.textContent = formatted;
+      confirmBtn.disabled = false;
+      placeSelected = {
+        formatted_address: formatted,
+        lat: lat,
+        lng: lng,
+        place_id: result.place_id || ''
+      };
+    } else {
+      preview.textContent = 'No se pudo obtener la dirección. Arrastra el marcador a otra ubicación.';
+      confirmBtn.disabled = true;
+    }
+  });
+}
+
+function confirmarUbicacionMapa() {
+  if (!mapModalMarker) return;
+  const pos = mapModalMarker.getPosition();
+  const lat = pos.lat();
+  const lng = pos.lng();
+  formState.lat = lat;
+  formState.lng = lng;
+  formState.address = document.getElementById('map-address-preview').textContent || '';
+  const input = document.getElementById('f-address');
+  if (input) input.value = formState.address;
+  cerrarMapaModal();
+  refreshLiveUI();
+  showToast('Ubicación actualizada ✓');
+}
+
+function cerrarMapaModal() {
+  document.getElementById('map-modal').classList.remove('is-open');
+}
+
+/* ================================================================
+   CARRITO
+   ================================================================ */
+function tryAddToCart(productId) {
+  const product = findProduct(productId);
+  if (!product || !isProductActive(product)) return;
+
+  if (productRequiresMenu(product) && !hasMenuInCart()) {
+    showToast('Este plato requiere un menú o combo en el carrito');
+    return;
+  }
+
+  const hasFlavors = (product.croquetasReq || product.croquetasMin) && activeFlavors.length > 0;
+  if (hasFlavors) {
+    const sel = flavorSelections[productId] || {};
+    const total = Object.values(sel).reduce((a, b) => a + b, 0);
+    const required = product.croquetasReq || 0;
+    const min = product.croquetasMin || 0;
+    if (required > 0 && total !== required) {
+      showToast(`Debes elegir exactamente ${required} sabores`);
+      return;
+    }
+    if (min > 0 && total < min) {
+      showToast(`Debes elegir al menos ${min} sabores`);
+      return;
+    }
+  }
+
+  let basePrice = product.price || 0;
+  let metaParts = [];
+
+  const optSelections = (window._optionSelections && window._optionSelections[productId]) || {};
+  if (product.options) {
+    product.options.forEach(opt => {
+      const choiceId = optSelections[opt.id];
+      if (choiceId) {
+        const choice = opt.choices.find(c => c.id === choiceId);
+        if (choice) {
+          if (choice.price) basePrice += choice.price;
+          metaParts.push(choice.name);
+        }
+      }
+    });
+  }
+
+  if (hasFlavors) {
+    const sel = flavorSelections[productId] || {};
+    const total = Object.values(sel).reduce((a, b) => a + b, 0);
+    const min = product.croquetasMin || 0;
+    const required = product.croquetasReq || 0;
+    if (min > 0 && total >= min) {
+      const extraPrice = product.extraPrice || 0;
+      if (required === 0 && min === 1) {
+        basePrice = total * (product.price || 1.25);
+      } else {
+        basePrice = product.price + (total - min) * extraPrice;
+      }
+    }
+    const flavorParts = [];
+    for (const [flavor, qty] of Object.entries(sel)) {
+      if (qty > 0) flavorParts.push(`${qty}x ${flavor}`);
+    }
+    if (flavorParts.length > 0) {
+      metaParts.push(flavorParts.join(', '));
+    }
+    flavorSelections[productId] = {};
+    refreshFlavorPanel(productId);
+  }
+
+  const meta = metaParts.join(' | ');
+
+  const stockDisponible = getStockDisponible(product);
+  if (stockDisponible !== null && stockDisponible < 1) {
+    showToast(stockDisponible <= 0
+      ? `Ya tienes en el carrito todo el stock disponible de "${product.name}"`
+      : `Solo queda${stockDisponible === 1 ? '' : 'n'} ${stockDisponible} unidad(es) de "${product.name}"`);
+    return;
+  }
+
+  const existingIndex = cart.findIndex(item => {
+    if (item.baseId !== productId) return false;
+    return item.meta === meta;
+  });
+
+  if (existingIndex >= 0) {
+    cart[existingIndex].qty++;
+  } else {
+    cart.push({
+      cartId: productId + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+      baseId: productId,
+      name: product.name,
+      meta: meta,
+      price: basePrice,
+      qty: 1
+    });
+  }
+
+  const btn = $(`[data-add="${productId}"]`);
+  if (btn) {
+    const original = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"/></svg>';
+    btn.classList.add('is-success');
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.classList.remove('is-success');
+    }, 700);
+  }
+
+  showToast(`${product.name} añadido al pedido`);
+  renderCart();
+  updateMenuDependentButtons();
+}
+
+function updateMenuDependentButtons() {
+  const hasMenu = hasMenuInCart();
+  $$('[data-add]').forEach(btn => {
+    const pid = btn.dataset.add;
+    if (!pid) return;
+    const prod = findProduct(pid);
+    if (!prod || !productRequiresMenu(prod)) return;
+    btn.disabled = !hasMenu;
+    const note = btn.parentElement.querySelector('.product-locked-note');
+    if (note) note.style.display = hasMenu ? 'none' : '';
+  });
+}
+
+function removeFromCart(cartId) {
+  const idx = cart.findIndex(item => item.cartId === cartId);
+  if (idx >= 0) {
+    cart.splice(idx, 1);
+    renderCart();
+    updateMenuDependentButtons();
+  }
+}
+
+function changeQty(cartId, delta) {
+  const item = cart.find(it => it.cartId === cartId);
+  if (!item) return;
+  if (delta > 0) {
+    const product = findProduct(item.baseId);
+    if (product && product.stock !== null && product.stock !== undefined) {
+      const unidad = unidadStock(product);
+      const consumidoActual = poolConsumidoEnCarrito(product);
+      if (consumidoActual + delta * unidad > product.stock + 1e-9) {
+        const restante = Math.max(0, (product.stock - consumidoActual) / unidad);
+        showToast(`Solo quedan ${restante} unidad(es) de "${item.name}"`);
+        return;
+      }
+    }
+  }
+  item.qty += delta;
+  if (item.qty <= 0) {
+    removeFromCart(cartId);
+    return;
+  }
+  renderCart();
+  updateMenuDependentButtons();
+}
+
+/* ================================================================
+   RENDERIZADO DEL CARRITO
+   ================================================================ */
+function renderCart() {
+  const modalBody = $('#modal-cart-body');
+  const html = buildCartHTML();
+  modalBody.innerHTML = html;
+  attachCartHandlers(modalBody);
+
+  if (formState.method === 'domicilio') {
+    // Retardamos ligeramente la inicialización para garantizar que el input ya existe en el DOM del modal
+    setTimeout(() => {
+      initAutocomplete();
+    }, 100);
+  } else if (autocomplete) {
+    google.maps.event.clearInstanceListeners(autocomplete);
+    autocomplete = null;
+    autocompleteInputEl = null;
+    document.querySelectorAll('.pac-container').forEach(el => el.remove());
+  }
+
+  const count = cart.reduce((acc, it) => acc + it.qty, 0);
+  const total = calculateTotal();
+  $('#fab-badge').textContent = count;
+  $('#fab-amount').textContent = fmt(total);
+  $('#modal-cart-title').textContent = `${txt('cart_label', 'Tu pedido')} · ${count} ${count === 1 ? 'artículo' : 'artículos'}`;
+}
+
+function buildCartHTML() {
+  const count = cart.reduce((acc, it) => acc + it.qty, 0);
+  const subtotal = calculateSubtotal();
+  const deliveryFee = (formState.method === 'domicilio' && cart.length > 0) ? DELIVERY_FEE : 0;
+  const total = subtotal + deliveryFee;
+  const warnings = getWarnings();
+
+  return `
+    <div class="cart">
+      <div class="cart-head">
+        <span class="cart-head-title">${txt('cart_label', 'Tu pedido')}</span>
+        <span class="cart-head-count"><span>${count}</span> ${count === 1 ? 'artículo' : 'artículos'}</span>
+      </div>
+      <div class="cart-body">
+        ${cart.length === 0
+          ? `<div class="cart-empty">
+              <div class="cart-empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 3h2l2.4 12.6a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L22 7H6"/>
+                  <circle cx="9" cy="20" r="1.2"/>
+                  <circle cx="18" cy="20" r="1.2"/>
+                </svg>
+              </div>
+              <p class="cart-empty-text">Aún no has añadido productos.<br>Explora la carta y empieza tu pedido.</p>
+            </div>`
+          : `<div class="cart-list">${cart.map(item => renderCartItem(item)).join('')}</div>`
+        }
+      </div>
+      ${cart.length > 0 ? `
+        <div class="cart-total">
+          <div>
+            <div class="cart-total-label">Total</div>
+            <div class="cart-total-delivery" id="cart-total-delivery">${formState.method === 'domicilio'
+              ? (subtotal < IMPORTE_MINIMO_DOMICILIO
+                  ? `Incluye ${fmt(DELIVERY_FEE)} de envío · faltan ${fmt(IMPORTE_MINIMO_DOMICILIO - subtotal)} para el mínimo`
+                  : `Incluye ${fmt(DELIVERY_FEE)} de envío a domicilio`)
+              : 'Recogida en tienda · sin coste'}</div>
+          </div>
+          <div class="cart-total-amount" id="cart-total-amount">${fmt(total)}</div>
+        </div>
+      ` : ''}
+      ${renderForm(warnings)}
+    </div>`;
+}
+
+function renderCartItem(item) {
+  const unitPrice = item.price;
+  const lineTotal = unitPrice * item.qty;
+  return `
+    <div class="cart-item" data-cart-id="${item.cartId}">
+      <div class="cart-item-name">${item.name}</div>
+      <div class="cart-item-price">${fmt(lineTotal)}</div>
+      <div class="cart-item-detail">
+        ${item.meta ? `<div>${item.meta}</div>` : ''}
+        <div style="color:var(--text-faint);margin-top:2px">${fmt(unitPrice)}${item.qty > 1 ? ` × ${item.qty}` : ''}</div>
+      </div>
+      <div class="cart-item-controls">
+        <div class="qty-control">
+          <button class="qty-btn" data-qty-dec="${item.cartId}" aria-label="Quitar uno">−</button>
+          <span class="qty-display">${item.qty}</span>
+          <button class="qty-btn" data-qty-inc="${item.cartId}" aria-label="Añadir uno">+</button>
+        </div>
+        <button class="remove-btn" data-remove="${item.cartId}">Eliminar</button>
+      </div>
+    </div>`;
+}
+
+function renderForm(warnings) {
+  const f = formState;
+  const todayD = new Date();
+  const today = `${todayD.getFullYear()}-${String(todayD.getMonth() + 1).padStart(2, '0')}-${String(todayD.getDate()).padStart(2, '0')}`;
+  const isValid = validateForm();
+
+  const showAddress = f.method === 'domicilio';
+  const addressSelected = !!(f.lat && f.lng && f.address);
+
+  return `
+    <form class="cart-form" onsubmit="event.preventDefault();">
+      <div class="form-section-title">Datos del pedido</div>
+      <div class="form-warnings" id="form-warnings-box">${warnings.map(w => `<div class="form-warning">${w}</div>`).join('')}</div>
+
+      <div class="form-row">
+        <span class="form-label">Método de entrega</span>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="method" value="recogida" ${f.method === 'recogida' ? 'checked' : ''} data-form="method">
+            <span class="dot"></span>
+            <span>Recogida</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="method" value="domicilio" ${f.method === 'domicilio' ? 'checked' : ''} data-form="method">
+            <span class="dot"></span>
+            <span>Envío a domicilio</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row two-col">
+        <div class="form-row">
+          <label class="form-label" for="f-date">Fecha <span class="req">*</span></label>
+          <input type="date" id="f-date" class="form-input" min="${today}" value="${f.date}" data-form="date">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="f-time">Hora <span class="req">*</span></label>
+          <select id="f-time" class="form-select" data-form="time">
+            <option value="">Elige hora</option>
+            ${(f.method === 'domicilio' ? FRANJAS_DOMICILIO : generateTimeSlots().map(t => ({ value: t, label: t })))
+              .map(t => `<option value="${t.value}" ${f.time === t.value ? 'selected' : ''}>${t.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row two-col">
+        <div class="form-row">
+          <label class="form-label" for="f-name">Nombre <span class="req">*</span></label>
+          <input type="text" id="f-name" class="form-input" value="${f.name}" data-form="name" placeholder="Tu nombre">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="f-phone">Teléfono <span class="req">*</span></label>
+          <input type="tel" id="f-phone" class="form-input" value="${f.phone}" data-form="phone" placeholder="600 000 000">
+        </div>
+      </div>
+
+      <!-- Dirección con Google Places (clásico) -->
+      <div class="form-row" data-address-row style="${showAddress ? '' : 'display:none'}">
+        <label class="form-label" for="f-address">Dirección <span class="req">*</span></label>
+        <div class="address-field-wrap">
+          <input type="text" id="f-address" class="form-input" value="${f.address}" data-form="address" placeholder="Introduce tu dirección" autocomplete="off">
+        </div>
+        <button type="button" class="address-map-btn" data-open-map style="${addressSelected ? 'inline-block' : 'none'}">📍 Ajustar ubicación en el mapa</button>
+        <div class="form-warning" id="address-warning" style="${showAddress && !addressSelected ? '' : 'display:none'}">Selecciona una dirección de las sugerencias o ajústala en el mapa.</div>
+      </div>
+
+      <!-- Campos adicionales solo si hay dirección seleccionada -->
+      <div style="${showAddress && addressSelected ? '' : 'display:none'}">
+        <div class="form-row two-col">
+          <div class="form-row">
+            <label class="form-label" for="f-piso">Piso (opcional)</label>
+            <input type="text" id="f-piso" class="form-input" value="${f.piso}" data-form="piso" placeholder="Ej. 3º 2ª" ${f.esCasa ? 'disabled' : ''}>
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="f-puerta">Puerta / Portal (opcional)</label>
+            <input type="text" id="f-puerta" class="form-input" value="${f.puerta}" data-form="puerta" placeholder="Ej. 2">
+          </div>
+        </div>
+        <div class="form-row two-col">
+          <div class="form-row">
+            <label class="form-label" for="f-escalera">Escalera (opcional)</label>
+            <input type="text" id="f-escalera" class="form-input" value="${f.escalera}" data-form="escalera" placeholder="Ej. A">
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="f-bloque">Bloque (opcional)</label>
+            <input type="text" id="f-bloque" class="form-input" value="${f.bloque}" data-form="bloque" placeholder="Ej. 2">
+          </div>
+        </div>
+        <label class="radio-option" style="margin-top:0.4rem; width:100%;">
+          <input type="checkbox" id="f-es-casa" ${f.esCasa ? 'checked' : ''} data-form-check="esCasa">
+          <span class="dot" style="border-radius:3px;"></span>
+          <span>Es una casa (sin piso)</span>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="f-notes">Notas (opcional)</label>
+        <textarea id="f-notes" class="form-textarea" data-form="notes" placeholder="Alergias, instrucciones, indicaciones para el repartidor…">${f.notes}</textarea>
+      </div>
+
+      <button class="submit-btn" data-submit ${!isValid ? 'disabled' : ''}>
+        Hacer pedido
+      </button>
+    </form>`;
+}
+
+function generateTimeSlots() {
+  const slots = [];
+  for (let h = 12; h <= 15; h++) {
+    for (let m = 0; m < 60; m += 15) {
+      if (h === 15 && m > 0) break;
+      slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+    }
+  }
+  return slots;
+}
+
+const FRANJAS_DOMICILIO = [
+  { value: '12:00-13:00', label: '12:00 - 13:00 h' },
+  { value: '13:00-14:00', label: '13:00 - 14:00 h' },
+  { value: '14:00-15:00', label: '14:00 - 15:00 h' }
+];
+
+function getWarnings() {
+  const warnings = [];
+  if (cart.some(item => {
+    const p = findProduct(item.baseId);
+    return p && productRequiresMenu(p);
+  }) && !hasMenuInCart()) {
+    warnings.push('Los platos extra requieren un menú o combo en el pedido.');
+  }
+  if (formState.method === 'domicilio') {
+    const subtotal = calculateSubtotal();
+    if (subtotal < IMPORTE_MINIMO_DOMICILIO) {
+      const faltan = (IMPORTE_MINIMO_DOMICILIO - subtotal).toFixed(2);
+      warnings.push(`Te faltan ${faltan} € para poder pedir a domicilio (mínimo ${IMPORTE_MINIMO_DOMICILIO} €).`);
+    }
+  }
+  return warnings;
+}
+
+function calculateSubtotal() {
+  return cart.reduce((sum, it) => {
+    let p = parseFloat(it.price);
+    if (isNaN(p)) {
+      // Intento de rescate si el precio trae formato de texto o símbolos
+      p = parseFloat(String(it.price).replace(',', '.').replace(/[^\d.-]/g, '')) || 0;
+    }
+    return sum + (p * (it.qty || 1));
+  }, 0);
+}
+
+function calculateTotal() {
+  const subtotal = calculateSubtotal();
+  const deliveryFee = (formState.method === 'domicilio' && cart.length > 0) ? DELIVERY_FEE : 0;
+  return subtotal + deliveryFee;
+}
+
+function validateForm() {
+  const f = formState;
+  if (!f.date || !f.time || !f.name.trim() || !f.phone.trim()) return false;
+  if (f.method === 'domicilio' && (!f.address.trim() || f.lat == null || f.lng == null)) return false;
+  if (cart.length === 0) return false;
+  if (getWarnings().length > 0) return false;
+  return true;
+}
+
+function hayInteraccionDireccionActiva() {
+  const activo = document.activeElement;
+  if (activo && activo.id === 'f-address') return true;
+  return false;
+}
+
+/* ================================================================
+   MANEJADORES DEL CARRITO
+   ================================================================ */
+function attachCartHandlers(root) {
+  $$('[data-qty-inc]', root).forEach(b => b.addEventListener('click', () => {
+    changeQty(b.dataset.qtyInc, 1);
+  }));
+  $$('[data-qty-dec]', root).forEach(b => b.addEventListener('click', () => {
+    changeQty(b.dataset.qtyDec, -1);
+  }));
+  $$('[data-remove]', root).forEach(b => b.addEventListener('click', () => {
+    removeFromCart(b.dataset.remove);
+  }));
+
+  $$('[data-form-check]', root).forEach(el => {
+    el.addEventListener('change', () => {
+      formState[el.dataset.formCheck] = el.checked;
+      if (el.checked) {
+        formState.piso = '';
+        const pisoInput = document.getElementById('f-piso');
+        if (pisoInput) pisoInput.disabled = true;
+      } else {
+        const pisoInput = document.getElementById('f-piso');
+        if (pisoInput) pisoInput.disabled = false;
+      }
+      renderCart();
+    });
+  });
+
+  $$('[data-form]', root).forEach(el => {
+    const evt = (el.type === 'radio' || el.tagName === 'SELECT' || el.type === 'date') ? 'change' : 'input';
+    el.addEventListener(evt, () => {
+      const key = el.dataset.form;
+      const value = el.value;
+      formState[key] = value;
+      if (key === 'method') {
+        formState.time = '';
+        document.querySelectorAll('[data-address-row]').forEach(row => {
+          row.style.display = value === 'domicilio' ? '' : 'none';
+        });
+        renderCart();
+      } else if (key === 'date') {
+        loadMenu(true);
+        updateSubmitButtonState();
+      } else if (key === 'address') {
+        if (placeSelected && value !== placeSelected.formatted_address) {
+          placeSelected = null;
+          formState.lat = null;
+          formState.lng = null;
+        }
+        refreshLiveUI();
+      } else {
+        updateSubmitButtonState();
+      }
+    });
+  });
+
+  $$('[data-submit]', root).forEach(b => b.addEventListener('click', handleSubmit));
+}
+
+function updateSubmitButtonState() {
+  const isValid = validateForm();
+  document.querySelectorAll('[data-submit]').forEach(btn => {
+    btn.disabled = !isValid;
+  });
+}
+
+// Sincroniza en vivo todos los avisos (dirección, mínimo de pedido, etc.)
+// sin volver a dibujar el formulario entero, para no perder el foco ni
+// romper el autocompletado de Google Maps en el campo de dirección.
+function refreshLiveUI() {
+  const f = formState;
+  const showAddress = f.method === 'domicilio';
+  const addressSelected = !!(f.lat && f.lng && f.address);
+
+  const addrWarning = document.getElementById('address-warning');
+  if (addrWarning) addrWarning.style.display = (showAddress && !addressSelected) ? '' : 'none';
+
+  const mapBtn = document.querySelector('[data-open-map]');
+  if (mapBtn) mapBtn.style.display = (showAddress && addressSelected) ? 'inline-block' : 'none';
+
+  const warningsBox = document.getElementById('form-warnings-box');
+  if (warningsBox) {
+    warningsBox.innerHTML = getWarnings().map(w => `<div class="form-warning">${w}</div>`).join('');
+  }
+
+  if (cart.length > 0) {
+    const subtotal = calculateSubtotal();
+    const deliveryText = document.getElementById('cart-total-delivery');
+    if (deliveryText) {
+      deliveryText.textContent = f.method === 'domicilio'
+        ? (subtotal < IMPORTE_MINIMO_DOMICILIO
+            ? `Incluye ${fmt(DELIVERY_FEE)} de envío · faltan ${fmt(IMPORTE_MINIMO_DOMICILIO - subtotal)} para el mínimo`
+            : `Incluye ${fmt(DELIVERY_FEE)} de envío a domicilio`)
+        : 'Recogida en tienda · sin coste';
+    }
+    const totalAmount = document.getElementById('cart-total-amount');
+    if (totalAmount) totalAmount.textContent = fmt(calculateTotal());
+  }
+
+  updateSubmitButtonState();
+}
+
+/* ================================================================
+   ENVÍO DEL PEDIDO
+   ================================================================ */
+async function handleSubmit() {
+  if (!validateForm()) return;
+
+  const submitBtns = document.querySelectorAll('[data-submit]');
+  submitBtns.forEach(b => {
+    b.disabled = true;
+    b.textContent = 'Procesando…';
+  });
+
+  let direccionFinal = formState.address;
+  if (formState.method === 'domicilio') {
+    const extras = [];
+    if (formState.puerta.trim()) extras.push(`Puerta ${formState.puerta.trim()}`);
+    if (!formState.esCasa && formState.piso.trim()) extras.push(`Piso ${formState.piso.trim()}`);
+    if (formState.escalera.trim()) extras.push(`Escalera ${formState.escalera.trim()}`);
+    if (formState.bloque.trim()) extras.push(`Bloque ${formState.bloque.trim()}`);
+    if (extras.length > 0) {
+      direccionFinal += ` · ${extras.join(', ')}`;
+    }
+  }
+
+  const articulos = cart.map(item => ({
+    qty: item.qty,
+    name: item.name,
+    meta: item.meta,
+    baseId: item.baseId,
+    price: item.price
+  }));
+
+  const total = calculateTotal();
+
+  const payload = {
+    nombre: formState.name,
+    telefono: formState.phone,
+    email: DEFAULT_EMAIL,
+    direccion: direccionFinal,
+    notas: formState.notes,
+    fecha_entrega: formState.date,
+    hora_entrega: formState.time,
+    metodo_entrega: formState.method,
+    articulos: articulos,
+    total: fmt(total),
+    lat: formState.method === 'domicilio' ? formState.lat : null,
+    lng: formState.method === 'domicilio' ? formState.lng : null
+  };
+
+  try {
+    const resp = await fetch(ORDER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!resp.ok) {
+      let errorMsg = 'Error al procesar el pedido.';
+      try {
+        const errData = await resp.json();
+        if (errData.detail) errorMsg = errData.detail;
+      } catch (_) {}
+      throw new Error(errorMsg);
+    }
+
+    const data = await resp.json();
+    showConfirmation(data.id);
+    cart = [];
+    renderCart();
+    updateMenuDependentButtons();
+    loadMenu(true);
+  } catch (err) {
+    showToast('❌ ' + err.message);
+    loadMenu(true);
+  } finally {
+    submitBtns.forEach(b => {
+      b.disabled = false;
+      b.textContent = 'Hacer pedido';
+    });
+  }
+}
+
+function showConfirmation(orderId) {
+  $('#confirm-num').textContent = 'XAT-' + orderId;
+  $('#confirm-time').textContent = formState.time;
+  $('#confirm-modal').classList.add('is-open');
+}
+
+/* ================================================================
+   MODALES Y TOASTS
+   ================================================================ */
+$('#cart-fab').addEventListener('click', () => {
+  $('#cart-modal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+});
+$('#modal-close').addEventListener('click', closeModal);
+$('#cart-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'cart-modal') closeModal();
+});
+function closeModal() {
+  $('#cart-modal').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+$('#confirm-close').addEventListener('click', () => {
+  $('#confirm-modal').classList.remove('is-open');
+});
+$('#confirm-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'confirm-modal') $('#confirm-modal').classList.remove('is-open');
+});
+
+// Mapa modal
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-open-map]')) abrirMapaModal();
+});
+document.getElementById('map-modal-close').addEventListener('click', cerrarMapaModal);
+document.getElementById('map-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'map-modal') cerrarMapaModal();
+});
+document.getElementById('map-confirm-btn').addEventListener('click', confirmarUbicacionMapa);
+
+/* ================================================================
+   ACTUALIZACIÓN AUTOMÁTICA DE LA CARTA
+   ================================================================ */
+const MENU_REFRESH_MS = 20000;
+setInterval(() => {
+  if (document.hidden) return;
+  loadMenu(true);
+}, MENU_REFRESH_MS);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
+    $('#confirm-modal').classList.remove('is-open');
+    cerrarMapaModal();
+  }
+});
+
+/* ================================================================
+   INICIO: Cargar Textos Editables
+   ================================================================ */
+loadTextos();
+
+/* ================================================================
+   INICIO: Cargar Config, luego Google Maps y Menú
+   ================================================================ */
+function initGoogleMaps() {
+  mapsReady = true;
+  if (document.getElementById('f-address')) {
+    initAutocomplete();
+  }
+  loadConfig().then(() => {
+    if (!menuData) loadMenu();
+  });
+}
+</script>
+<!-- Cargar Google Maps API (clásica) -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbtZRmLZ-MQabLbJvlCjREzRpU_2c1X8E&libraries=places&language=es&callback=initGoogleMaps">
+</script>
+</body>
+</html>
